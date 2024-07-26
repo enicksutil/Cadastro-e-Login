@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página de Login</title>
+  <style>
+    body {
+      background-color: #D3D3D3;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      position: relative;
+    }
+    .login-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+    button {
+      background-color: rgb(251, 255, 2);
+      color: rgb(0, 0, 0);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+      width: 100%;
+      font-family: "Times New Roman", Times, serif;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: rgb(228, 231, 2);
+    }
+    input[type="text"], input[type="password"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-group {
+      margin: 15px 0;
+    }
+    .error {
+      color: red;
+      display: none;
+    }
+    .image-container {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
+    .password-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .password-container input[type="password"] {
+      width: 100%;
+      padding-right: 40px; 
+      box-sizing: border-box; 
+    }
+    .password-toggle {
+      background: none;
+      border: none;
+      font-size: 1em;
+      cursor: pointer;
+      color: #007bff;
+      transition: color 0.3s ease;
+      align-self: flex-end; 
+    }
+    .password-toggle:hover {
+      color: #0056b3;
+      background-color: transparent; 
+    }
+  </style>
+  <script>
+    function redirecionarParaEsqueciSenha() {
+      window.location.href = "file:///C:/Users/enick/Desktop/Code/Redefinir%20senha.html";
+    }
+
+    function realizarLogin(evento) {
+      evento.preventDefault();
+      const usuarioInput = document.getElementById('usuario');
+      const senhaInput = document.getElementById('senha');
+      const mensagemErro = document.getElementById('mensagem-erro');
+
+      const usuariosArmazenados = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+      const usuarioEncontrado = usuariosArmazenados.find(user => user.usuario === usuarioInput.value && user.senha === senhaInput.value);
+
+      if (usuarioEncontrado) {
+        alert('Login bem-sucedido!');
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
+        window.location.href = "file:///C:/Users/enick/Desktop/Code/Página%20usuário.html";
+      } else {
+        mensagemErro.style.display = 'block';
+        mensagemErro.textContent = 'Usuário ou senha incorretos.';
+      }
+    }
+
+    function alternarVisibilidadeSenha(idInput, idBotao) {
+      const input = document.getElementById(idInput);
+      const botao = document.getElementById(idBotao);
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        botao.textContent = 'Ocultar Senha';
+      } else {
+        input.type = 'password';
+        botao.textContent = 'Mostrar Senha';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const lembrarUsuarioCheckbox = document.getElementById('lembrarUsuario');
+      const usuarioInput = document.getElementById('usuario');
+
+      if (localStorage.getItem('lembrarUsuario') === 'true') {
+        usuarioInput.value = localStorage.getItem('usuario');
+        lembrarUsuarioCheckbox.checked = true;
+      }
+
+      lembrarUsuarioCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          localStorage.setItem('lembrarUsuario', 'true');
+        } else {
+          localStorage.removeItem('lembrarUsuario');
+        }
+      });
+    });
+
+    function handleEsqueciSenha() {
+      alert('Redirecionar para recuperar senha');
+    }
+  </script>
+</head>
+<body>
+  <main class="login-container">
+    <h2>Login</h2>
+    <form onsubmit="realizarLogin(event)">
+      <div class="form-group">
+        <input type="text" id="usuario" name="usuario" placeholder="Usuário" required>
+      </div>
+      <div class="form-group password-container">
+        <input type="password" id="senha" name="senha" placeholder="Senha" required>
+        <button type="button" class="password-toggle" id="alternarSenha" onclick="alternarVisibilidadeSenha('senha', 'alternarSenha')">👁️ Mostrar Senha</button>
+      </div>
+      <div class="form-group">
+        <input type="checkbox" id="lembrarUsuario" name="lembrarUsuario">
+        <label for="lembrarUsuario">Lembrar Usuário</label>
+      </div>
+      <p id="mensagem-erro" class="error">Usuário ou senha incorretos.</p>
+      <button type="submit">Login</button>
+      <button type="button" onclick="redirecionarParaEsqueciSenha()">Esqueci minha senha</button>
+    </form>
+  </main>
+  <div class="image-container">
+    <img src="imagens/Website.png" alt="Description" width="100">
+  </div>
+</body>
+</html>
