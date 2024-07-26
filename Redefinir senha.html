@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redefinição de Senha</title>
+  <style>
+    body {
+      background-color: #D3D3D3;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      position: relative;
+    }
+    .reset-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+    button {
+      background-color: rgb(251, 255, 2);
+      color: rgb(0, 0, 0);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+      width: 100%;
+      font-family: "Times New Roman", Times, serif;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: rgb(228, 231, 2);
+    }
+    .mostrar-senha {
+      background-color: #f0f0f0;
+      color: #000;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+      width: auto;
+      font-size: 12px;
+    }
+    input[type="password"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-group {
+      margin: 15px 0;
+      position: relative;
+    }
+    .erro {
+      color: red;
+      display: none;
+    }
+    .sucesso {
+      color: green;
+      display: none;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const senhaAtualInput = document.getElementById('senhaAtual');
+      const novaSenhaInput = document.getElementById('novaSenha');
+      const confirmarSenhaInput = document.getElementById('confirmarSenha');
+      const formularioRedefinicao = document.querySelector('form');
+      const mensagemErro = document.getElementById('mensagem-erro');
+      const mensagemSucesso = document.getElementById('mensagem-sucesso');
+
+      formularioRedefinicao.addEventListener('submit', function(event) {
+        event.preventDefault();
+        mensagemErro.style.display = 'none';
+        mensagemSucesso.style.display = 'none';
+
+        const senhaAtual = senhaAtualInput.value.trim();
+        const novaSenha = novaSenhaInput.value.trim();
+        const confirmarSenha = confirmarSenhaInput.value.trim();
+
+        if (validarFormulario(senhaAtual, novaSenha, confirmarSenha)) {
+          alert('Senha redefinida com sucesso!');
+          mensagemSucesso.style.display = 'block';
+        } else {
+          mensagemErro.style.display = 'block';
+        }
+      });
+
+      function validarFormulario(senhaAtual, novaSenha, confirmarSenha) {
+        if (senhaAtual === '' || novaSenha === '' || confirmarSenha === '') {
+          mensagemErro.textContent = 'Por favor, preencha todos os campos.';
+          return false;
+        }
+        if (novaSenha !== confirmarSenha) {
+          mensagemErro.textContent = 'A nova senha e a confirmação não correspondem.';
+          return false;
+        }
+        if (!validarForcaSenha(novaSenha)) {
+          mensagemErro.textContent = 'A nova senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula e um número.';
+          return false;
+        }
+        return true;
+      }
+
+      function validarForcaSenha(senha) {
+        const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        return regexSenha.test(senha);
+      }
+
+      document.getElementById('alternarSenhaAtual').addEventListener('click', function() {
+        alternarVisibilidadeSenha(senhaAtualInput, this);
+      });
+      document.getElementById('alternarNovaSenha').addEventListener('click', function() {
+        alternarVisibilidadeSenha(novaSenhaInput, this);
+      });
+      document.getElementById('alternarConfirmarSenha').addEventListener('click', function() {
+        alternarVisibilidadeSenha(confirmarSenhaInput, this);
+      });
+
+      function alternarVisibilidadeSenha(input, botao) {
+        if (input.type === 'password') {
+          input.type = 'text';
+          botao.textContent = 'Ocultar Senha';
+        } else {
+          input.type = 'password';
+          botao.textContent = 'Mostrar Senha';
+        }
+      }
+    });
+  </script>
+</head>
+<body>
+  <main class="reset-container">
+    <h2>Redefinir Senha</h2>
+    <form>
+      <div class="form-group">
+        <input type="password" id="senhaAtual" name="senhaAtual" placeholder="Senha Atual" required>
+        <button type="button" id="alternarSenhaAtual" class="mostrar-senha">Mostrar Senha</button>
+      </div>
+      <div class="form-group">
+        <input type="password" id="novaSenha" name="novaSenha" placeholder="Nova Senha" required>
+        <button type="button" id="alternarNovaSenha" class="mostrar-senha">Mostrar Senha</button>
+      </div>
+      <div class="form-group">
+        <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar Nova Senha" required>
+        <button type="button" id="alternarConfirmarSenha" class="mostrar-senha">Mostrar Senha</button>
+      </div>
+      <p id="mensagem-erro" class="erro">Por favor, preencha todos os campos.</p>
+      <p id="mensagem-sucesso" class="sucesso">Senha redefinida com sucesso!</p>
+      <button type="submit">Redefinir Senha</button>
+    </form>
+  </main>
+</body>
+</html>

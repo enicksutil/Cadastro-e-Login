@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .profile-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .profile-container img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+        .profile-container h1 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        .profile-container p {
+            color: #666;
+        }
+        .edit-button {
+            background-color: rgb(251, 255, 2);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-button:hover {
+            background-color: rgb(251, 255, 2);
+        }
+        .edit-form {
+            display: none;
+            margin-top: 20px;
+        }
+        .edit-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .save-button {
+            background-color: rgb(251, 255, 2);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .save-button:hover {
+            background-color: rgb(251, 255, 2);
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <img src="imagens/Website.png" alt="Description" width="100">
+        <h1 id="user-name">Nome do Usuário</h1>
+        <p id="user-email">email@usuario.com</p>
+        <button class="edit-button" onclick="editProfile()">Editar Perfil</button>
+
+        <div class="edit-form" id="edit-form">
+            <input type="text" id="edit-name" placeholder="Nome">
+            <input type="email" id="edit-email" placeholder="Email">
+            <button class="save-button" onclick="saveProfile()">Salvar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+            if (!usuarioLogado) {
+                window.location.href = "file:///C:/Users/enick/Desktop/Code/Site.html";
+                return;
+            }
+
+            document.getElementById('user-name').textContent = usuarioLogado.nome;
+            document.getElementById('user-email').textContent = usuarioLogado.email;
+        });
+
+        function editProfile() {
+            document.getElementById('edit-form').style.display = 'block';
+            const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+            document.getElementById('edit-name').value = usuarioLogado.nome;
+            document.getElementById('edit-email').value = usuarioLogado.email;
+        }
+
+        function saveProfile() {
+            const nome = document.getElementById('edit-name').value;
+            const email = document.getElementById('edit-email').value;
+            const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+            usuarioLogado.nome = nome;
+            usuarioLogado.email = email;
+
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+
+            document.getElementById('user-name').textContent = nome;
+            document.getElementById('user-email').textContent = email;
+
+            document.getElementById('edit-form').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
